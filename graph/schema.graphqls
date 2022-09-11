@@ -1,0 +1,65 @@
+# Query root
+type Query {
+  users: [User!]!
+  games: [Game!]!
+  groups: [Group!]!
+  teams: [Team!]!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  games: [Game!]!
+  groups: [Group!]!
+  teams: [Team!]!
+}
+
+type Game {
+  id: ID!
+  name: String!
+  users: [User!]!
+  groups: [Group!]!
+  teams: [Team!]!
+}
+
+type Group {
+  id: ID!
+  name: String!
+  users: [User!]!
+  games: [Game!]!
+  teams: [Team!]!
+}
+
+type Team {
+  id: ID!
+  name: String!
+  users: [User!]!
+  games: [Game!]!
+  groups: [Group!]!
+}
+
+# Mutation root
+type Mutation {
+  createUser(input: CreateUserInput!): User!
+  createGame(input: CreateGameInput!): Game!
+  createGroup(input: CreateGroupInput!): Group!
+  createTeam(input: CreateTeamInput!): Team!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+}
+
+input CreateGameInput {
+  name: String!
+}
+
+input CreateGroupInput {
+  name: String!
+}
+
+input CreateTeamInput {
+  name: String!
+}
