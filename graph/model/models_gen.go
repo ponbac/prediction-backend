@@ -2,52 +2,106 @@
 
 package model
 
-type CreateGameInput struct {
-	Name string `json:"name"`
-}
-
-type CreateGroupInput struct {
-	Name string `json:"name"`
-}
-
-type CreateTeamInput struct {
-	Name string `json:"name"`
-}
-
-type CreateUserInput struct {
-	Name  string `json:"name"`
-	Email string `json:"email"`
-}
-
 type Game struct {
-	ID     string   `json:"id"`
-	Name   string   `json:"name"`
-	Users  []*User  `json:"users"`
-	Groups []*Group `json:"groups"`
-	Teams  []*Team  `json:"teams"`
+	ID        string `json:"id"`
+	HomeTeam  *Team  `json:"homeTeam"`
+	AwayTeam  *Team  `json:"awayTeam"`
+	HomeScore *int   `json:"homeScore"`
+	AwayScore *int   `json:"awayScore"`
+	Winner    *Team  `json:"winner"`
+	Finished  bool   `json:"finished"`
+	StartTime string `json:"startTime"`
+}
+
+type GameInput struct {
+	ID        string  `json:"id"`
+	HomeTeam  string  `json:"homeTeam"`
+	AwayTeam  string  `json:"awayTeam"`
+	HomeScore *int    `json:"homeScore"`
+	AwayScore *int    `json:"awayScore"`
+	Winner    *string `json:"winner"`
+	Finished  bool    `json:"finished"`
+	StartTime *string `json:"startTime"`
+}
+
+type GamePrediction struct {
+	Game      *Game `json:"game"`
+	Winner    *Team `json:"winner"`
+	HomeScore int   `json:"homeScore"`
+	AwayScore int   `json:"awayScore"`
+}
+
+type GamePredictionInput struct {
+	Game      string `json:"game"`
+	Winner    string `json:"winner"`
+	HomeScore int    `json:"homeScore"`
+	AwayScore int    `json:"awayScore"`
 }
 
 type Group struct {
-	ID    string  `json:"id"`
-	Name  string  `json:"name"`
-	Users []*User `json:"users"`
-	Games []*Game `json:"games"`
-	Teams []*Team `json:"teams"`
+	ID      string  `json:"id"`
+	Teams   []*Team `json:"teams"`
+	Games   []*Game `json:"games"`
+	Results []*Team `json:"results"`
+}
+
+type GroupInput struct {
+	ID      string   `json:"id"`
+	Teams   []string `json:"teams"`
+	Games   []string `json:"games"`
+	Results []string `json:"results"`
+}
+
+type GroupPrediction struct {
+	Group    *Group  `json:"group"`
+	Ordering []*Team `json:"ordering"`
+}
+
+type GroupPredictionInput struct {
+	Group    string   `json:"group"`
+	Ordering []string `json:"ordering"`
+}
+
+type Prediction struct {
+	User             *User              `json:"user"`
+	GroupPredictions []*GroupPrediction `json:"groupPredictions"`
+	GamePredictions  []*GamePrediction  `json:"gamePredictions"`
+}
+
+type PredictionInput struct {
+	User             *UserInput              `json:"user"`
+	GroupPredictions []*GroupPredictionInput `json:"groupPredictions"`
+	GamePredictions  []*GamePredictionInput  `json:"gamePredictions"`
 }
 
 type Team struct {
-	ID     string   `json:"id"`
-	Name   string   `json:"name"`
-	Users  []*User  `json:"users"`
-	Games  []*Game  `json:"games"`
-	Groups []*Group `json:"groups"`
+	ID    string  `json:"id"`
+	Name  string  `json:"name"`
+	Logo  string  `json:"logo"`
+	Games []*Game `json:"games"`
+}
+
+type TeamInput struct {
+	ID    string   `json:"id"`
+	Name  string   `json:"name"`
+	Logo  string   `json:"logo"`
+	Games []string `json:"games"`
 }
 
 type User struct {
-	ID     string   `json:"id"`
-	Name   string   `json:"name"`
-	Email  string   `json:"email"`
-	Games  []*Game  `json:"games"`
-	Groups []*Group `json:"groups"`
-	Teams  []*Team  `json:"teams"`
+	ID          string      `json:"id"`
+	Name        string      `json:"name"`
+	Description *string     `json:"description"`
+	Score       int         `json:"score"`
+	Avatar      *string     `json:"avatar"`
+	Prediction  *Prediction `json:"prediction"`
+}
+
+type UserInput struct {
+	ID          *string          `json:"id"`
+	Name        *string          `json:"name"`
+	Description *string          `json:"description"`
+	Score       *int             `json:"score"`
+	Avatar      *string          `json:"avatar"`
+	Prediction  *PredictionInput `json:"prediction"`
 }

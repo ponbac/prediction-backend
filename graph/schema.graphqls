@@ -4,62 +4,118 @@ type Query {
   games: [Game!]!
   groups: [Group!]!
   teams: [Team!]!
+  predictions: [Prediction!]!
 }
 
 type User {
   id: ID!
   name: String!
-  email: String!
-  games: [Game!]!
-  groups: [Group!]!
-  teams: [Team!]!
+  description: String
+  score: Int!
+  avatar: String
+  prediction: Prediction
+}
+
+type Prediction {
+  user: User!
+  groupPredictions: [GroupPrediction]
+  gamePredictions: [GamePrediction]
+}
+
+type GroupPrediction {
+  group: Group!
+  ordering: [Team!]!
+}
+
+type GamePrediction {
+  game: Game!
+  winner: Team!
+  homeScore: Int!
+  awayScore: Int!
 }
 
 type Game {
   id: ID!
-  name: String!
-  users: [User!]!
-  groups: [Group!]!
-  teams: [Team!]!
+  homeTeam: Team!
+  awayTeam: Team!
+  homeScore: Int
+  awayScore: Int
+  winner: Team!
+  finished: Boolean!
+  startTime: String!
 }
 
 type Group {
-  id: ID!
-  name: String!
-  users: [User!]!
-  games: [Game!]!
+  id: String!
   teams: [Team!]!
+  games: [Game!]!
+  results: [Team!]
 }
 
 type Team {
   id: ID!
   name: String!
-  users: [User!]!
+  logo: String!
   games: [Game!]!
-  groups: [Group!]!
 }
 
 # Mutation root
 type Mutation {
-  createUser(input: CreateUserInput!): User!
-  createGame(input: CreateGameInput!): Game!
-  createGroup(input: CreateGroupInput!): Group!
-  createTeam(input: CreateTeamInput!): Team!
+  upsertUser(input: UserInput!): User!
+  upsertPrediction(input: PredictionInput!): Prediction!
+  upsertGame(input: GameInput!): Game!
+  upsertGroup(input: GroupInput!): Group!
+  upsertTeam(input: TeamInput!): Team!
 }
 
-input CreateUserInput {
-  name: String!
-  email: String!
+input UserInput {
+  id: ID
+  name: String
+  description: String
+  score: Int
+  avatar: String
+  prediction: PredictionInput
 }
 
-input CreateGameInput {
-  name: String!
+input GroupPredictionInput {
+  group: String!
+  ordering: [ID!]!
 }
 
-input CreateGroupInput {
-  name: String!
+input GamePredictionInput {
+  game: ID!
+  winner: ID!
+  homeScore: Int!
+  awayScore: Int!
 }
 
-input CreateTeamInput {
+input PredictionInput {
+  user: UserInput!
+  groupPredictions: [GroupPredictionInput]
+  gamePredictions: [GamePredictionInput]
+}
+
+input GameInput {
+  id: ID!
+  homeTeam: ID!
+  awayTeam: ID!
+  homeScore: Int
+  awayScore: Int
+  winner: ID
+  finished: Boolean!
+  startTime: String
+}
+
+input GroupInput {
+  id: String!
+  teams: [ID!]
+  games: [ID!]
+  results: [ID!]
+}
+
+input TeamInput {
+  id: ID!
   name: String!
+  logo: String!
+  games: [ID!]
 }
